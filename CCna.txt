@@ -1,0 +1,123 @@
+CCna
+
+Linux shit 
+root
+C1sc0123
+
+basic commands ng mga port
+192.168.152.128 - to ip antin for serial
+
+
+
+1. configure  d1 and d2 dhcp 
+
+Vlan 10
+
+d1: .100-.199
+d2: .200.-254
+
+@D1
+conf t 
+ ip dhcp excluded-address 10.2.1.1 10.2.1.99
+ ip dhcp excluded-address 10.2.1.200 10.2.1.254
+ !
+ ip dhcp pool MGMTPOOL
+ network 10.2.1.0 255.255.255.0
+ default-router 10.2.1.1
+ dns-server 10.2.1.1
+ domain-name MGMT.COM
+ end
+
+d2
+conf t 
+ ip dhcp excluded-address 10.2.1.1 10.2.1.199
+ !
+ ip dhcp  pool MGMTPOOL
+  network 10.2.1.0 255.255.255.0
+ default-router 10.2.1.2
+ dns-server 10.2.1.2
+ domain-name MGMT.COM
+ end
+
+
+2. Configure p1 and p2  as dhcp clients for their vlans
+
+a1
+
+conf t 
+ interface e0/0
+  switchport mode access
+  switchport access vlan 10
+  end
+
+a2
+conf t 
+interface e1/0
+  switchport mode access
+  switchport access vlan 10
+  end
+
+p1 
+conf t 
+ interface e0/0
+  no shut
+  ip add dhcp
+ end
+
+
+p2 
+conf t 
+ interface e1/0
+  no shut
+  ip add dhcp
+ end
+
+ex 2 
+
+configure d1 as dhcp server for vlan 100
+
+-dhcp pool name SERVERpool
+network : 192.168.1.128 255.255.255.224
+default gateway 192.168.1.129
+dns: 192.168.1.129
+domain:server.com
+
+
+
+
+ conf t
+ ip dhcp pool SERVERPOOL
+ network 192.168.1.128 255.255.255.224
+ default-router 192.168.1.129
+ dns-server 192.168.1.129
+ domain-name SERVER.COM
+ exit
+interface e1/0
+ switchport mode access
+ switchport access vlan 100
+end
+
+ex3
+
+conf t 
+ip dhcp pool DNSPOOL
+ network 10.2.2.0 255.255.255.0
+ default-router 10.2.2.2
+ dns-server 10.2.2.2
+ domain-name DNS.COM
+ exit
+interface e1/0
+ switchport mode access
+ switchport access vlan 20
+end
+
+
+
+s1 and s2  to ipapaste 
+
+conf t
+ interface e1/0
+ ip add dhcp
+end
+show ip int brief | ex una
+
